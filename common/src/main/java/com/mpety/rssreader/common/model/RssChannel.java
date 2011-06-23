@@ -11,7 +11,7 @@ public class RssChannel {
 	private Date lastBuildDate;
 	private String source; //RSS forrása
 	
-	private List<RssItem> itemList; //TODO item osztályt definiálni
+	private List<RssItem> itemList;
 	
 	public String getSource() {
 		return source;
