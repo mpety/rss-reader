@@ -16,151 +16,216 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class RssProcessTest {
-	
-	public static void main(String[] args){
-		
+
+	public static void main(String[] args) {
+
 		try {
-			 
-  	      SAXParserFactory factory = SAXParserFactory.newInstance();
-  	      SAXParser saxParser = factory.newSAXParser();
 
-  	      DefaultHandler handler = new DefaultHandler() {
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser saxParser = factory.newSAXParser();
 
-  	    	boolean item = false;
-  	    	boolean title = false;
-  	    	boolean pubDate = false;
-  	        boolean link = false;
-  	        boolean description = false;
-  	        boolean category = false;
-  	       
+			DefaultHandler handler = new DefaultHandler() {
 
-  	        public void startElement(String uri, String localName, String qName, Attributes attributes)
-  	            throws SAXException {
+				boolean channel = false;
+				boolean item = false;
+				boolean title = false;
+				boolean pubDate = false;
+				boolean lastBuildDate = false;
+				boolean link = false;
+				boolean description = false;
+				boolean category = false;
 
-  	          System.out.println("Start Element :" + qName);
-  	        	
-  	        if (qName.equalsIgnoreCase("item")) {
-  	        	item = true;
-    	    }
+				public void startElement(String uri, String localName,
+						String qName, Attributes attributes)
+						throws SAXException {
 
-  	          if (qName.equalsIgnoreCase("title")) {
-  	        	  title = true;
-  	          }
-  	          
-  	          if (qName.equalsIgnoreCase("pubDate")) {
-	        	  pubDate = true;
-	          }
+					System.out.println("Start Element :" + qName);
 
-  	          if (qName.equalsIgnoreCase("link")) {
-  	        	  link = true;
-  	          }
+					if (qName.equalsIgnoreCase("channel")) {
+						channel = true;
+						
+						if (qName.equalsIgnoreCase("title")) {
+							title = true;
+						}
+						if (qName.equalsIgnoreCase("description")) {
+							description = true;
+						}
+						if (qName.equalsIgnoreCase("link")) {
+							link = true;
+						}
+						if (qName.equalsIgnoreCase("lastBuildDate")) {
+							lastBuildDate = true;
+						}
+					}
 
-  	          if (qName.equalsIgnoreCase("description")) {
-  	        	  description = true;
-  	          }
+					else {
 
-  	          if (qName.equalsIgnoreCase("category")) {
-  	        	  category = true;
-  	          }
-  	          
-  	        }
+						if (qName.equalsIgnoreCase("item")) {
+							item = true;
+						}
 
-  	        public void endElement(String uri, String localName, String qName)
-  	                throws SAXException {
+						if (qName.equalsIgnoreCase("title")) {
+							title = true;
+						}
 
-  	              System.out.println("End Element :" + qName);
-  	              
-  	            if (qName.equalsIgnoreCase("item")) {
-  	  	        	item = false;
-  	    	    }
+						if (qName.equalsIgnoreCase("pubDate")) {
+							pubDate = true;
+						}
 
-  	  	          if (qName.equalsIgnoreCase("title")) {
-  	  	        	  title = false;
-  	  	          }
-  	  	          
-  	  	          if (qName.equalsIgnoreCase("pubDate")) {
-  		        	  pubDate = false;
-  		          }
+						if (qName.equalsIgnoreCase("link")) {
+							link = true;
+						}
 
-  	  	          if (qName.equalsIgnoreCase("link")) {
-  	  	        	  link = false;
-  	  	          }
+						if (qName.equalsIgnoreCase("description")) {
+							description = true;
+						}
 
-  	  	          if (qName.equalsIgnoreCase("description")) {
-  	  	        	  description = false;
-  	  	        	  System.out.println();
-  	  	          }
+						if (qName.equalsIgnoreCase("category")) {
+							category = true;
+						}
+					}
+				}
 
-  	  	          if (qName.equalsIgnoreCase("category")) {
-  	  	        	  category = false;
-  	  	          }
+				public void endElement(String uri, String localName,
+						String qName) throws SAXException {
 
-  	        }
+					System.out.println("End Element :" + qName);
 
-  	        public void characters(char ch[], int start, int length)
-  	            throws SAXException {
+					if (qName.equalsIgnoreCase("channel")) {
+						channel = false;
+						
+						if (qName.equalsIgnoreCase("title")) {
+							title = false;
+						}
+						if (qName.equalsIgnoreCase("description")) {
+							description = false;
+						}
+						if (qName.equalsIgnoreCase("link")) {
+							link = false;
+						}
+						if (qName.equalsIgnoreCase("lastBuildDate")) {
+							lastBuildDate = false;
+						}
+					}
+					else {
 
-  	          //System.out.println(new String(ch, start, length) + "/n");
-  	        	
-  	        if (item){
-  	        	System.out.println("\n");
-  	        	item = false;
-  	        }
-  	          	        
-  	          if (title) {
-  	            System.out.println(new String(ch, start, length));
-  	            title = false;
-  	          }
-  	          
-  	          if (pubDate) {
-  	            System.out.println(new String(ch, start, length));
-  	            pubDate = false;
-  	          }
+						if (qName.equalsIgnoreCase("item")) {
+							item = false;
+						}
 
-  	          if (link) {
-  	              System.out.println(new String(ch, start, length));
-  	              
-  	           }
+						if (qName.equalsIgnoreCase("title")) {
+							title = false;
+						}
 
-  	          if (description) {
-  	              System.out.print(new String(ch, start, length));
-  	              /*for(int i = 0; i < length; i++){
-  	            	if (ch[i] == '<' || ch[i] == '>'){
-  	            		System.out.println("mi a picsa?");
-  	            	}
-  	              }*/
-  	             
-  	           }
-  	        
-  	          if (category) {
-  	              System.out.println(new String(ch, start, length));
-  	              category = false;
-  	           }
-  	        }
+						if (qName.equalsIgnoreCase("pubDate")) {
+							pubDate = false;
+						}
 
-  	      };
+						if (qName.equalsIgnoreCase("link")) {
+							link = false;
+						}
 
-  	      /*File file = new File("d:\\file.xml");
-  	      InputStream inputStream= new FileInputStream(file);
-  	      Reader reader = new InputStreamReader(inputStream,"UTF-8");
+						if (qName.equalsIgnoreCase("description")) {
+							description = false;
+							System.out.println();
+						}
 
-  	      InputSource is = new InputSource(reader);
-  	      is.setEncoding("UTF-8");*/
-  	      
-  	    //mz kódja
-  	      
-  	    Reader reader = new StringReader(RssLoadTest.read(RssLoadTest.getURL()));
-  	    InputSource is = new InputSource(reader);
-  	    //is.setEncoding("UTF-8");
-  	    saxParser.parse(is, handler);
-  	      
-  	      //próbálkozás
-  	      //saxParser.parse(RssLoadTest.read("http://www.sg.hu/plain/rss.xml"), handler);
+						if (qName.equalsIgnoreCase("category")) {
+							category = false;
+						}
+					}
+				}
 
+				public void characters(char ch[], int start, int length)
+						throws SAXException {
 
-  	    } catch (Exception e) {
-  	      e.printStackTrace();
-  	    }
+					// System.out.println(new String(ch, start, length) + "/n");
+					
+					if(channel){
+						if(title){
+							System.out.println(new String(ch, start, length));
+							title = false;
+						}
+						if(description){
+							System.out.print(new String(ch, start, length));
+							/*
+							 * for(int i = 0; i < length; i++){ if (ch[i] == '<' ||
+							 * ch[i] == '>'){ System.out.println("mi a picsa?"); } }
+							 */
+							description = false;
+						}
+						if(link){
+							System.out.println(new String(ch, start, length));
+							link = false;
+						}
+						if(lastBuildDate){
+							System.out.println(new String(ch, start, length));
+							lastBuildDate = false;
+						}
+						channel = false;
+					}
 
-  }
+					if (item) {
+						System.out.println("\n");
+						item = false;
+					}
+
+					if (title) {
+						System.out.println(new String(ch, start, length));
+						title = false;
+					}
+
+					if (pubDate) {
+						System.out.println(new String(ch, start, length));
+						pubDate = false;
+					}
+
+					if (link) {
+						System.out.println(new String(ch, start, length));
+						link = false;
+					}
+
+					if (description) {
+						System.out.print(new String(ch, start, length));
+						/*
+						 * for(int i = 0; i < length; i++){ if (ch[i] == '<' ||
+						 * ch[i] == '>'){ System.out.println("mi a picsa?"); } }
+						 */
+						description = false;
+					}
+
+					if (category) {
+						System.out.println(new String(ch, start, length));
+						category = false;
+					}
+				}
+
+			};
+
+			/*
+			 * File file = new File("d:\\file.xml"); InputStream inputStream=
+			 * new FileInputStream(file); Reader reader = new
+			 * InputStreamReader(inputStream,"UTF-8");
+			 * 
+			 * InputSource is = new InputSource(reader);
+			 * is.setEncoding("UTF-8");
+			 */
+
+			// mz kódja
+
+			Reader reader = new StringReader(RssLoadTest.read(RssLoadTest
+					.getURL()));
+			InputSource is = new InputSource(reader);
+			// is.setEncoding("UTF-8");
+			saxParser.parse(is, handler);
+
+			// próbálkozás
+			// saxParser.parse(RssLoadTest.read("http://www.sg.hu/plain/rss.xml"),
+			// handler);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 }
