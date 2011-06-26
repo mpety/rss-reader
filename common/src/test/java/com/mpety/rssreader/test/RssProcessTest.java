@@ -24,6 +24,7 @@ public class RssProcessTest {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
+			//TODO ezt a belső osztályt bedolgozni a RssXmlHandler-be!
 			DefaultHandler handler = new DefaultHandler() {
 
 				boolean item = false;
