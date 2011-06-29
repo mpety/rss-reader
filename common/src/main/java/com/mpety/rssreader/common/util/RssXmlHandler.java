@@ -5,14 +5,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class RssXmlHandler extends DefaultHandler {
-	
-	boolean item = false;
-	boolean title = false;
-	boolean pubDate = false;
-	boolean lastBuildDate = false;
-	boolean link = false;
-	boolean description = false;
-	boolean category = false;
+
+	private boolean item = false;
+	private boolean title = false;
+	private boolean pubDate = false;
+	private boolean lastBuildDate = false;
+	private boolean link = false;
+	private boolean description = false;
+	private boolean category = false;
 
 	public void startElement(String uri, String localName,
 			String qName, Attributes attributes)

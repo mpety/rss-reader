@@ -5,9 +5,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class UrlDownloader { //kellene ennek egy getURL metódus mint az RssLoadTest.java -ban is?
+public class UrlDownloader { 
+	//TODO elolvasni: kellene ennek egy getURL metódus mint az RssLoadTest.java -ban is?
+	//nem kell, az RssLoadTest-ben csak azért kellett, mert console-ról akartuk beolvasni
 	
-	public String download(String www) throws Exception{ //ezt a kivételkezelést még magyarázni kell!
+	public String download(String www) throws Exception{ //TODO ezt a kivételkezelést még magyarázni kell!
 		
 		URL url = new URL(www);
 		URLConnection connection = url.openConnection();

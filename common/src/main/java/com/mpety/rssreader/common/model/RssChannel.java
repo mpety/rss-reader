@@ -1,5 +1,6 @@
 package com.mpety.rssreader.common.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,6 +62,13 @@ public class RssChannel {
 		this.itemList = itemList;
 	}
 
+	public void addItem(RssItem item) {
+		if (itemList == null) {
+			itemList = new ArrayList<RssItem>();
+		}
+		itemList.add(item);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
