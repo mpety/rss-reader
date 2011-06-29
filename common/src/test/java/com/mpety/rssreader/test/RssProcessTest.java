@@ -38,7 +38,7 @@ public class RssProcessTest {
 						String qName, Attributes attributes)
 						throws SAXException {
 
-					//System.out.println("Start Element :" + qName);
+					System.out.println("Start Element :" + qName);
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = true;
@@ -72,7 +72,7 @@ public class RssProcessTest {
 				public void endElement(String uri, String localName,
 						String qName) throws SAXException {
 
-					//System.out.println("End Element :" + qName);
+					System.out.println("End Element :" + qName);
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = false;
@@ -110,8 +110,8 @@ public class RssProcessTest {
 					// System.out.println(new String(ch, start, length) + "/n");
 
 					if (item) {
-						System.out.println("\n");
-						item = false;
+						//System.out.println("\n");
+						//item = false;
 					}
 
 					if (title) {
@@ -147,6 +147,7 @@ public class RssProcessTest {
 						System.out.println(new String(ch, start, length));
 						category = false;
 					}
+					
 				}
 
 			};
