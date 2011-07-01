@@ -1,5 +1,5 @@
-package com.mpety.rssreader.test;
-
+package com.mpety.rssreader.test; //TODO Ennek az egész csomagnak a tartalmát csak meghagytam magamnak, (RssLoadTest, RssProcessTest)
+								  //hogy lássam egészbe működni, meg console-ról tesztelni tudjam!
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -27,6 +27,7 @@ public class RssProcessTest {
 			//TODO ezt a belső osztályt bedolgozni a RssXmlHandler-be!
 			DefaultHandler handler = new DefaultHandler() {
 
+				boolean channel = false;
 				boolean item = false;
 				boolean title = false;
 				boolean pubDate = false;
@@ -39,10 +40,15 @@ public class RssProcessTest {
 						String qName, Attributes attributes)
 						throws SAXException {
 
-					System.out.println("Start Element :" + qName);
+					//System.out.println("Start Element :" + qName);
+					
+						if (qName.equalsIgnoreCase("channel")) {
+							channel = true;
+						}
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = true;
+							channel = false;
 						}
 
 						if (qName.equalsIgnoreCase("title")) {
@@ -73,7 +79,7 @@ public class RssProcessTest {
 				public void endElement(String uri, String localName,
 						String qName) throws SAXException {
 
-					System.out.println("End Element :" + qName);
+					//System.out.println("End Element :" + qName);
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = false;
@@ -97,7 +103,7 @@ public class RssProcessTest {
 
 						if (qName.equalsIgnoreCase("description")) {
 							description = false;
-							System.out.println();
+							System.out.println();					//-----------------------------
 						}
 
 						if (qName.equalsIgnoreCase("category")) {
@@ -109,46 +115,71 @@ public class RssProcessTest {
 						throws SAXException {
 
 					// System.out.println(new String(ch, start, length) + "/n");
+					if(channel){
+						
+						if (title) {
+							System.out.println(new String(ch, start, length));
+							title = false;
+						}
+						
+						if(lastBuildDate){
+							System.out.println(new String(ch, start, length));
+							lastBuildDate = false;
+						}
+	
+						if (link) {
+							System.out.println(new String(ch, start, length));
+							link = false;
+						}
+	
+						if (description) {
+							System.out.print(new String(ch, start, length));
+							description = false;
+						}
+					}
 
 					if (item) {
 						//System.out.println("\n");
 						//item = false;
+						//}
+						if (title) {
+							for(int i = 0; i < length; i++){
+								if(ch[i] == '"'){
+									//TODO Valahogy ignorálni kell ezeket a buzi írásjeleket, hogy ne vegye figyelembe!
+									//TODO Hogyan lehet egy ilyen Task-ot completed-é tenni?
+								}
+							}
+							System.out.println(new String(ch, start, length));
+							title = false;
+						}
+	
+						if (pubDate) {
+							System.out.println(new String(ch, start, length));
+							pubDate = false;
+						}
+	
+						if (link) {
+							System.out.println(new String(ch, start, length));
+							link = false;
+						}
+	
+						if (description) {
+							System.out.print(new String(ch, start, length));
+							
+							  /*for(int i = 0; i < length; i++){
+								  if (ch[i] == '<' || ch[i] == '>'){
+									  System.out.print("hmm"); 
+								  }
+							  }*/
+							 
+							description = false;
+						}
+	
+						if (category) {
+							System.out.println(new String(ch, start, length));
+							category = false;
+						}
 					}
-
-					if (title) {
-						System.out.println(new String(ch, start, length));
-						title = false;
-					}
-
-					if (pubDate) {
-						System.out.println(new String(ch, start, length));
-						pubDate = false;
-					}
-					
-					if(lastBuildDate){
-						System.out.println(new String(ch, start, length));
-						lastBuildDate = false;
-					}
-
-					if (link) {
-						System.out.println(new String(ch, start, length));
-						link = false;
-					}
-
-					if (description) {
-						System.out.print(new String(ch, start, length));
-						/*
-						 * for(int i = 0; i < length; i++){ if (ch[i] == '<' ||
-						 * ch[i] == '>'){ System.out.println("mi a picsa?"); } }
-						 */
-						description = false;
-					}
-
-					if (category) {
-						System.out.println(new String(ch, start, length));
-						category = false;
-					}
-					
 				}
 
 			};

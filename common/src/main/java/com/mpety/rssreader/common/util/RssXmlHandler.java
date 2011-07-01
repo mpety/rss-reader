@@ -4,8 +4,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.mpety.rssreader.common.model.RssChannel;
+
 public class RssXmlHandler extends DefaultHandler {
 
+	private boolean channel = false;
 	private boolean item = false;
 	private boolean title = false;
 	private boolean pubDate = false;
@@ -17,11 +20,14 @@ public class RssXmlHandler extends DefaultHandler {
 	public void startElement(String uri, String localName,
 			String qName, Attributes attributes)
 			throws SAXException {
-
-		//System.out.println("Start Element :" + qName);
+		
+			if (qName.equalsIgnoreCase("channel")) {
+				channel = true;
+			}
 
 			if (qName.equalsIgnoreCase("item")) {
 				item = true;
+				channel = false;
 			}
 
 			if (qName.equalsIgnoreCase("title")) {
@@ -52,8 +58,6 @@ public class RssXmlHandler extends DefaultHandler {
 	public void endElement(String uri, String localName,
 			String qName) throws SAXException {
 
-		//System.out.println("End Element :" + qName);
-
 			if (qName.equalsIgnoreCase("item")) {
 				item = false;
 			}
@@ -76,7 +80,7 @@ public class RssXmlHandler extends DefaultHandler {
 
 			if (qName.equalsIgnoreCase("description")) {
 				description = false;
-				System.out.println();
+				//System.out.println();
 			}
 
 			if (qName.equalsIgnoreCase("category")) {
@@ -86,46 +90,67 @@ public class RssXmlHandler extends DefaultHandler {
 
 	public void characters(char ch[], int start, int length)
 			throws SAXException {
+		
+		if(channel){
+			
+			if (title) {
+				String cim = new String (ch, start, length);
+				//RssChannel.setTitle(cim); //TODO Valahogy így képzeltem el,
+											//hogy át kellene adni az értékeket az RssChannel és RssItem osztályoknak
+				//System.out.println(new String(ch, start, length));
+				title = false;
+			}
+			
+			if(lastBuildDate){
+				System.out.println(new String(ch, start, length));
+				lastBuildDate = false;
+			}
 
-		// System.out.println(new String(ch, start, length) + "/n");
+			if (link) {
+				System.out.println(new String(ch, start, length));
+				link = false;
+			}
+
+			if (description) {
+				System.out.print(new String(ch, start, length));
+				/*
+				 * for(int i = 0; i < length; i++){ if (ch[i] == '<' ||
+				 * ch[i] == '>'){ System.out.println("mi a picsa?"); } }
+				 */
+				description = false;
+			}
+		}
 
 		if (item) {
-			System.out.println("\n");
-			item = false;
-		}
 
-		if (title) {
-			System.out.println(new String(ch, start, length));
-			title = false;
-		}
-
-		if (pubDate) {
-			System.out.println(new String(ch, start, length));
-			pubDate = false;
-		}
-		
-		if(lastBuildDate){
-			System.out.println(new String(ch, start, length));
-			lastBuildDate = false;
-		}
-
-		if (link) {
-			System.out.println(new String(ch, start, length));
-			link = false;
-		}
-
-		if (description) {
-			System.out.print(new String(ch, start, length));
-			/*
-			 * for(int i = 0; i < length; i++){ if (ch[i] == '<' ||
-			 * ch[i] == '>'){ System.out.println("mi a picsa?"); } }
-			 */
-			description = false;
-		}
-
-		if (category) {
-			System.out.println(new String(ch, start, length));
-			category = false;
+			if (title) {
+				System.out.println(new String(ch, start, length));
+				title = false;
+			}
+	
+			if (pubDate) {
+				System.out.println(new String(ch, start, length));
+				pubDate = false;
+			}
+			
+			if (link) {
+				System.out.println(new String(ch, start, length));
+				link = false;
+			}
+	
+			if (description) {
+				System.out.print(new String(ch, start, length));
+				/*
+				 * for(int i = 0; i < length; i++){ if (ch[i] == '<' ||
+				 * ch[i] == '>'){ System.out.println("mi a picsa?"); } }
+				 */
+				description = false;
+			}
+	
+			if (category) {
+				System.out.println(new String(ch, start, length));
+				category = false;
+			}
 		}
 	}
 }

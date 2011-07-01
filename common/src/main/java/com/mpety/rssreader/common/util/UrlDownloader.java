@@ -8,6 +8,7 @@ import java.net.URLConnection;
 public class UrlDownloader { 
 	//TODO elolvasni: kellene ennek egy getURL metódus mint az RssLoadTest.java -ban is?
 	//nem kell, az RssLoadTest-ben csak azért kellett, mert console-ról akartuk beolvasni
+	//Akkor ez hogy fogja megkapni az URL-t?
 	
 	public String download(String www) throws Exception{ //TODO ezt a kivételkezelést még magyarázni kell!
 		
