@@ -15,6 +15,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.mpety.rssreader.common.model.RssChannel;
+import com.mpety.rssreader.common.model.RssItem;
+
 public class RssProcessTest {
 
 	public static void main(String[] args) {
@@ -24,9 +27,11 @@ public class RssProcessTest {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
-			//TODO ezt a belső osztályt bedolgozni a RssXmlHandler-be!
 			DefaultHandler handler = new DefaultHandler() {
 
+				StringBuilder sb = new StringBuilder();
+				RssChannel rssChannel;
+				RssItem rssItem;
 				boolean channel = false;
 				boolean item = false;
 				boolean title = false;
@@ -44,11 +49,13 @@ public class RssProcessTest {
 					
 						if (qName.equalsIgnoreCase("channel")) {
 							channel = true;
+							rssChannel = new RssChannel();
 						}
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = true;
 							channel = false;
+							rssItem = new RssItem();
 						}
 
 						if (qName.equalsIgnoreCase("title")) {
@@ -74,6 +81,7 @@ public class RssProcessTest {
 						if (qName.equalsIgnoreCase("category")) {
 							category = true;
 						}
+						sb.setLength(0);
 				}
 
 				public void endElement(String uri, String localName,
@@ -83,10 +91,18 @@ public class RssProcessTest {
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = false;
+							//System.out.println("item: " + sb.toString());
 						}
 
 						if (qName.equalsIgnoreCase("title")) {
 							title = false;
+							System.out.println("title: " + sb.toString());
+							if(item){
+								rssItem.setTitle(sb.toString());
+							}
+							else{
+								rssChannel.setTitle(sb.toString());
+							}
 						}
 
 						if (qName.equalsIgnoreCase("pubDate")) {
@@ -94,7 +110,7 @@ public class RssProcessTest {
 						}
 						
 						if (qName.equalsIgnoreCase("lastBuildDate")) {
-							lastBuildDate = true;
+							lastBuildDate = false;
 						}
 
 						if (qName.equalsIgnoreCase("link")) {
@@ -103,83 +119,20 @@ public class RssProcessTest {
 
 						if (qName.equalsIgnoreCase("description")) {
 							description = false;
-							System.out.println();					//-----------------------------
+							//System.out.println();					//-----------------------------
 						}
 
 						if (qName.equalsIgnoreCase("category")) {
 							category = false;
 						}
+						sb.setLength(0);
 				}
 
 				public void characters(char ch[], int start, int length)
 						throws SAXException {
+					
+					sb.append(ch, start, length);
 
-					// System.out.println(new String(ch, start, length) + "/n");
-					if(channel){
-						
-						if (title) {
-							System.out.println(new String(ch, start, length));
-							title = false;
-						}
-						
-						if(lastBuildDate){
-							System.out.println(new String(ch, start, length));
-							lastBuildDate = false;
-						}
-	
-						if (link) {
-							System.out.println(new String(ch, start, length));
-							link = false;
-						}
-	
-						if (description) {
-							System.out.print(new String(ch, start, length));
-							description = false;
-						}
-					}
-
-					if (item) {
-						//System.out.println("\n");
-						//item = false;
-						//}
-						if (title) {
-							for(int i = 0; i < length; i++){
-								if(ch[i] == '"'){
-									//TODO Valahogy ignorálni kell ezeket a buzi írásjeleket, hogy ne vegye figyelembe!
-									//TODO Hogyan lehet egy ilyen Task-ot completed-é tenni?
-								}
-							}
-							System.out.println(new String(ch, start, length));
-							title = false;
-						}
-	
-						if (pubDate) {
-							System.out.println(new String(ch, start, length));
-							pubDate = false;
-						}
-	
-						if (link) {
-							System.out.println(new String(ch, start, length));
-							link = false;
-						}
-	
-						if (description) {
-							System.out.print(new String(ch, start, length));
-							
-							  /*for(int i = 0; i < length; i++){
-								  if (ch[i] == '<' || ch[i] == '>'){
-									  System.out.print("hmm"); 
-								  }
-							  }*/
-							 
-							description = false;
-						}
-	
-						if (category) {
-							System.out.println(new String(ch, start, length));
-							category = false;
-						}
-					}
 				}
 
 			};
@@ -199,7 +152,8 @@ public class RssProcessTest {
 			InputSource is = new InputSource(reader);
 			// is.setEncoding("UTF-8");
 			saxParser.parse(is, handler);
-
+			
+			System.out.println("vége");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
