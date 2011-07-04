@@ -3,3 +3,4 @@
 common/bin
 ui/bin
 test-output
+*.log

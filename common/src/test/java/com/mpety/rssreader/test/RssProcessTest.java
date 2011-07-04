@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -19,7 +20,9 @@ import com.mpety.rssreader.common.model.RssChannel;
 import com.mpety.rssreader.common.model.RssItem;
 
 public class RssProcessTest {
-
+	
+	private static final Logger log = Logger.getLogger(RssProcessTest.class.getName());
+	
 	public static void main(String[] args) {
 
 		try {
@@ -45,7 +48,7 @@ public class RssProcessTest {
 						String qName, Attributes attributes)
 						throws SAXException {
 
-					//System.out.println("Start Element :" + qName);
+					log.fine("Start Element :" + qName);
 					
 						if (qName.equalsIgnoreCase("channel")) {
 							channel = true;
@@ -87,7 +90,7 @@ public class RssProcessTest {
 				public void endElement(String uri, String localName,
 						String qName) throws SAXException {
 
-					//System.out.println("End Element :" + qName);
+					log.fine("End Element :" + qName);
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = false;
@@ -96,7 +99,7 @@ public class RssProcessTest {
 
 						if (qName.equalsIgnoreCase("title")) {
 							title = false;
-							System.out.println("title: " + sb.toString());
+							log.config("title: " + sb.toString());
 							if(item){
 								rssItem.setTitle(sb.toString());
 							}
