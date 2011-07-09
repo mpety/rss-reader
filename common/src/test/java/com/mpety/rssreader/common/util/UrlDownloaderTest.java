@@ -37,11 +37,21 @@ public class UrlDownloaderTest {
 		assert content.contains("<title>Index</title>") : "Index címlap nem található!";
 	}
 	
+	/**
+	 * Az {@link UrlDownloader#download(String)} metódus {@link RssException} hibával
+	 * tér-e vissza, ha az url nem megfelelő
+	 * @throws Exception
+	 */
 	@Test(expectedExceptions = {RssException.class})
 	public void incorrectUrl() throws Exception {
 		UrlDownloader.download(incorrectUrl);
 	}
 	
+	/**
+	 * Az {@link UrlDownloader#download(String)} metódus {@link RssException} hibával
+	 * tér-e vissza, ha az url nem megfelelő, illetve a hibakód megfelelő-e (WRONG_URL)
+	 * @throws Exception
+	 */
 	@Test(expectedExceptions = {RssException.class})
 	public void wrongUrlErroCode() throws Exception {
 		try {
@@ -52,11 +62,21 @@ public class UrlDownloaderTest {
 		}
 	}
 	
+	/**
+	 * Az {@link UrlDownloader#download(String)} metódus {@link RssException} hibával
+	 * tér-e vissza, ha az url nem elérhető
+	 * @throws Exception
+	 */
 	@Test(expectedExceptions = {RssException.class})
 	public void notExistingUrl() throws Exception {
 		UrlDownloader.download(nonExistingUrl);
 	}
 	
+	/**
+	 * Az {@link UrlDownloader#download(String)} metódus {@link RssException} hibával
+	 * tér-e vissza, ha az url nem elérhető, illetve a hibakód megfelelő-e (IO_ERROR)
+	 * @throws Exception
+	 */
 	@Test(expectedExceptions = {RssException.class})
 	public void ioErrorErrorCode() throws Exception {
 		try {
