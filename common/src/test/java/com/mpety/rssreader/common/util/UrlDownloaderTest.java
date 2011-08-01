@@ -5,6 +5,12 @@ import org.testng.annotations.Test;
 
 import com.mpety.rssreader.common.exception.RssException;
 
+/**
+ * Tesztelésnek...
+ * @author Bearcheese
+ *
+ */
+
 public class UrlDownloaderTest {
 
 	private String testUrl;

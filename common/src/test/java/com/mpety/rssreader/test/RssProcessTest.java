@@ -6,6 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.SAXParser;
@@ -36,6 +40,8 @@ public class RssProcessTest {
 				RssChannel rssChannel;
 				RssItem rssItem;
 				
+				SimpleDateFormat date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH); //TODO nah ezt hogy is kell kívülre írni vagy public static-nak? mindkettőt sejtem de nem biztos hogy jól...
+				
 				boolean channel = false;
 				boolean item = false;
 				boolean title = false;
@@ -54,6 +60,7 @@ public class RssProcessTest {
 						if (qName.equalsIgnoreCase("channel")) {
 							channel = true;
 							rssChannel = new RssChannel();
+							rssChannel.setItemList(null); //TODO ez lehet nem is muszáj ide ugye?
 						}
 
 						if (qName.equalsIgnoreCase("item")) {
@@ -95,7 +102,8 @@ public class RssProcessTest {
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = false;
-							//System.out.println("item: " + sb.toString());
+							rssChannel.addItem(rssItem);
+							//log.config("item: " + sb.toString());
 						}
 
 						if (qName.equalsIgnoreCase("title")) {
@@ -109,25 +117,55 @@ public class RssProcessTest {
 							}
 						}
 
-						if (qName.equalsIgnoreCase("pubDate")) {
-							pubDate = false;
-						}
-						
-						if (qName.equalsIgnoreCase("lastBuildDate")) {
-							lastBuildDate = false;
-						}
-
 						if (qName.equalsIgnoreCase("link")) {
 							link = false;
+							log.config("link: " + sb.toString());
+							if(item){
+								rssItem.setLink(sb.toString());
+							}
+							else{
+								rssChannel.setLink(sb.toString());
+							}
 						}
 
 						if (qName.equalsIgnoreCase("description")) {
 							description = false;
-							//System.out.println();					//-----------------------------
+							log.config("description: " + sb.toString());
+							if(item){
+								rssItem.setDescription(sb.toString());
+							}
+							else{
+								rssChannel.setDescription(sb.toString());
+							}
+							//System.out.println();					//TODO ez nem tudom miért kellett, sztem csak a kiíratás miatt, de gondolom kitörölhetem már, vagy lesz jelentősége, hogy ide kellene egy új sor? - gondolom nem...
 						}
 
 						if (qName.equalsIgnoreCase("category")) {
 							category = false;
+							log.config("category: " + sb.toString());
+							rssItem.setCategory(sb.toString()); //TODO mivel csak az itemnek van ilyen eleme ezért így csináltam - ezeket a todo-imat majd kitörölgetheted, ha jó amit írok, vagy átírhatod sima kommentre :D
+						}
+						
+						if (qName.equalsIgnoreCase("pubDate")) {
+							pubDate = false;
+							log.config("pubDate: " + sb.toString());
+							try { //TODO ezeket is a saját kivételkezelővel kellene megoldani?
+								rssItem.setPubDate(date.parse(sb.toString()));
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						
+						if (qName.equalsIgnoreCase("lastBuildDate")) {
+							lastBuildDate = false;
+							log.config("lastBuildDate: " + sb.toString());
+							try {
+								rssChannel.setLastBuildDate(date.parse(sb.toString()));
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 						sb.setLength(0);
 				}
@@ -150,14 +188,12 @@ public class RssProcessTest {
 			 * is.setEncoding("UTF-8");
 			 */
 
-			// mz kódja
-
 			Reader reader = new StringReader(RssLoadTest.read(RssLoadTest.getURL()));
 			InputSource is = new InputSource(reader);
 			// is.setEncoding("UTF-8");
 			saxParser.parse(is, handler);
 			
-			System.out.println("vége");
+			System.out.println("vége"); //--------------------------------------------------------------------------
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

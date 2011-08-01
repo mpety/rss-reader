@@ -5,7 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 
+ * Az RSS-t tartalmazó XML fájl, channel tag-ek között lévő adatainak osztályba szervezése, magába foglalja az RssItem-eket is,
+ * ezeket egy listában tárolja.
+ * Getter és setter metódusai vannak a channel adataihoz (title, description, link, lastBuildDate, source), valamint az RssItem 
+ * listájához is, ehhez egy addItem metódussal lehet új item-eket hozzáadni.
+ * Ezeken kívül van egy equals(Object obj) és egy hashCode() metódusa is.
  * @author Peti
  *
  */

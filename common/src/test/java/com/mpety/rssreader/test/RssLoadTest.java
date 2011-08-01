@@ -6,6 +6,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+/**
+ * Van egy getURL() és egy read() (static)metódusa, amik segítségével beolvashatunk egy tetszőleges URL-en lévő RSS-t egy String-be.
+ * Ezt az osztályt csak a saját tesztelésre használom.
+ * @author Peti
+ *
+ */
 public class RssLoadTest{
 	
 	private static final String RssURL = "http://www.sg.hu/plain/rss.xml";
@@ -35,6 +41,12 @@ public class RssLoadTest{
 		   }
 	}
 	
+	/**
+	 * 
+	 * @param vár egy xml-t tartalmazó (Rss-feed) URL-t
+	 * @return visszatér egy String-el, amiben a megkapott URL-en lévő xml(RSS) tartalma van - soronként beolvasva
+	 * @throws Exception
+	 */
 	public static String read(String xml) throws Exception {
 
 		URL url = new URL(xml);

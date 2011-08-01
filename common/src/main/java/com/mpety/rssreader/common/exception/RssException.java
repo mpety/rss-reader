@@ -1,5 +1,9 @@
 package com.mpety.rssreader.common.exception;
-
+/**
+ * Saját kivételkezelő osztály.
+ * @author Peti
+ *
+ */
 public class RssException extends Exception {
 	
 	private static final long serialVersionUID = -8785158060240427309L;

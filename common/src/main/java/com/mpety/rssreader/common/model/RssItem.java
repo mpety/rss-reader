@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * Az RSS-t tartalmazó XML fájl, item tag-ek között lévő adatainak osztályba szervezése (title, link, description, category, pubDate).
- * Csak getter és setter metódusai vannak.
+ * Csak getter és setter metódusai vannak (mindegyik adathoz).
  * @author Peti
  *
  */
@@ -12,7 +12,7 @@ import java.util.Date;
 public class RssItem {
 	
 	private String title;
-	private String link; //Az adott itemhez tartozó (cikk) link
+	private String link; //Az adott itemhez tartozó (adott 'cikk'-re mutató) link
 	private String description;
 	private String category;
 	private Date pubDate;

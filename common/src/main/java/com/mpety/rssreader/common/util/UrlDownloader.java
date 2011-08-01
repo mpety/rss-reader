@@ -14,8 +14,8 @@ public class UrlDownloader {
 	/**
 	 * Letölti a megadott url-en lévő tartalmat.
 	 * 
-	 * @param www url
-	 * @return az url-en lévő tartalom
+	 * @param www - ez az URL
+	 * @return az URL-en lévő tartalom
 	 * @throws RssException saját kivételkezelő által kezelt kivételek: WRONG_URL v. IO_ERROR 
 	 */
 	public static String download(String www) throws RssException {
