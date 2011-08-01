@@ -6,12 +6,14 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class RssLoadTest {
+public class RssLoadTest{
+	
+	private static final String RssURL = "http://www.sg.hu/plain/rss.xml";
 
 	/**
-	 * @param args
+	 * 
+	 * @return visszatér azzal az URL-el, amit megadtunk neki vagy - ha nem adunk meg semmit - az RssURL értékével
 	 */
-	
 	public static String getURL() {
 		   
 		   String lineURL = "";
@@ -25,22 +27,20 @@ public class RssLoadTest {
 		   }
 		   catch(IOException e){ }
 		   
-		return lineURL;
+		   if(lineURL.equals("")){
+			   return RssURL;
+		   }
+		   else{
+			   return lineURL;
+		   }
 	}
 	
 	public static String read(String xml) throws Exception {
 
-		/*if (args.length != 1) {
-			System.out.println("The first parameter should be an url!");
-			System.exit(-1);
-		}*/
-
 		URL url = new URL(xml);
 		URLConnection connection = url.openConnection();
 		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		String inputLine = in.readLine(); //?
-		
-		//return inputLine;
+		String inputLine;
 		
 		String xmlString = "";
         while ((inputLine = in.readLine()) != null) {
@@ -49,15 +49,6 @@ public class RssLoadTest {
         in.close();
         
         return xmlString;
-
-		/*while ((inputLine = in.readLine()) != null)
-			System.out.println(inputLine);
-		in.close();*/
-		
-		//ez miért kell? ez létrehoz egy ilyen típusú objektumot és annak vesszük a metódusát?
-		
-		/*RSSProcessTest processzalo = new RSSProcessTest();
-		processzalo.process(inputLine);*/
 
 	}	
 }

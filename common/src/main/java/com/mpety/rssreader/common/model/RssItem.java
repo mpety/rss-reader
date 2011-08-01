@@ -2,6 +2,13 @@ package com.mpety.rssreader.common.model;
 
 import java.util.Date;
 
+/**
+ * Az RSS-t tartalmazó XML fájl, item tag-ek között lévő adatainak osztályba szervezése (title, link, description, category, pubDate).
+ * Csak getter és setter metódusai vannak.
+ * @author Peti
+ *
+ */
+
 public class RssItem {
 	
 	private String title;

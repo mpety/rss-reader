@@ -16,31 +16,31 @@ public class UrlDownloader {
 	 * 
 	 * @param www url
 	 * @return az url-en lévő tartalom
-	 * @throws RssException WRONG_URL v. IO_ERROR 
+	 * @throws RssException saját kivételkezelő által kezelt kivételek: WRONG_URL v. IO_ERROR 
 	 */
 	public static String download(String www) throws RssException {
 
 		String xmlString;
+		
 		try {
 			URL url = new URL(www);
 			URLConnection connection = url.openConnection();
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					connection.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
 
 			xmlString = "";
 			while ((inputLine = in.readLine()) != null) {
 				xmlString = xmlString + inputLine;
 			}
+			
 			in.close();
 			return xmlString;
+			
 		} catch (MalformedURLException e) {
-			RssException re = new RssException("URL is incorrect!",
-					RssException.WRONG_URL, e);
+			RssException re = new RssException("URL is incorrect!", RssException.WRONG_URL, e);
 			throw re;
 		} catch (IOException e) {
-			RssException re = new RssException("Unexpected IO exception!",
-					RssException.IO_ERROR, e);
+			RssException re = new RssException("Unexpected IO exception!", RssException.IO_ERROR, e);
 			throw re;
 		}
 	}

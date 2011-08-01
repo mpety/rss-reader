@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 
+ * @author Peti
+ *
+ */
+
 public class RssChannel {
 	
 	private String title;

@@ -35,6 +35,7 @@ public class RssProcessTest {
 				StringBuilder sb = new StringBuilder();
 				RssChannel rssChannel;
 				RssItem rssItem;
+				
 				boolean channel = false;
 				boolean item = false;
 				boolean title = false;

@@ -12,13 +12,6 @@ public class UrlDownloaderTest {
 		testUrl = "http://index.hu/";
 	}
 	
-	/*
-	 *TODO Megjegyzések:
-	 * - a download metódus lehetne static
-	 * - StringBuilder használata
-	 * - kódolás?
-	 */
-	
 	/**
 	 * Az {@link UrlDownloader#download(String)} metódus tesztelése
 	 * (Megjegyzés: felerészben az internetkapcsolat meglétét teszteli,
