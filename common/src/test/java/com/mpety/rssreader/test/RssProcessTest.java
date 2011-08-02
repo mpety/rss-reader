@@ -1,20 +1,16 @@
 package com.mpety.rssreader.test; //TODO Ennek az egész csomagnak a tartalmát csak meghagytam magamnak, (RssLoadTest, RssProcessTest)
 								  //hogy lássam egészbe működni, meg console-ról tesztelni tudjam!
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -25,7 +21,8 @@ import com.mpety.rssreader.common.model.RssItem;
 
 public class RssProcessTest {
 	
-	private static final Logger log = Logger.getLogger(RssProcessTest.class.getName());
+	//TODO Java logging és SLF4J közötti különbségeket megbeszélni
+	private static final Logger log = LoggerFactory.getLogger(RssProcessTest.class);
 	
 	public static void main(String[] args) {
 
@@ -40,7 +37,9 @@ public class RssProcessTest {
 				RssChannel rssChannel;
 				RssItem rssItem;
 				
-				SimpleDateFormat date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH); //TODO nah ezt hogy is kell kívülre írni vagy public static-nak? mindkettőt sejtem de nem biztos hogy jól...
+				//TODO valahogy így gondoltam, de belső osztályban nem lehet static adattag, szóval
+				//ha majd ki lesz szervezve az RssXmlHandler-be akkor még egy static is kell a private után
+				private final SimpleDateFormat date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH); 
 				
 				boolean channel = false;
 				boolean item = false;
@@ -55,12 +54,12 @@ public class RssProcessTest {
 						String qName, Attributes attributes)
 						throws SAXException {
 
-					log.fine("Start Element :" + qName);
+					log.debug("Start Element: {}", qName); //a {} rész egy un. placeholder, azaz helykijelölő, oda fog kerülni a qName értéke (mint C-ben a %s és társaik)
 					
 						if (qName.equalsIgnoreCase("channel")) {
 							channel = true;
 							rssChannel = new RssChannel();
-							rssChannel.setItemList(null); //TODO ez lehet nem is muszáj ide ugye?
+							//rssChannel.setItemList(null); //TODO nem szükséges, mert az rssChannel list-je nincs beállítva semmire, alapból null lesz
 						}
 
 						if (qName.equalsIgnoreCase("item")) {
@@ -98,7 +97,7 @@ public class RssProcessTest {
 				public void endElement(String uri, String localName,
 						String qName) throws SAXException {
 
-					log.fine("End Element :" + qName);
+					log.debug("End Element: {}", qName);
 
 						if (qName.equalsIgnoreCase("item")) {
 							item = false;
@@ -108,7 +107,7 @@ public class RssProcessTest {
 
 						if (qName.equalsIgnoreCase("title")) {
 							title = false;
-							log.config("title: " + sb.toString());
+							log.info("title: {}", sb.toString());
 							if(item){
 								rssItem.setTitle(sb.toString());
 							}
@@ -119,7 +118,7 @@ public class RssProcessTest {
 
 						if (qName.equalsIgnoreCase("link")) {
 							link = false;
-							log.config("link: " + sb.toString());
+							log.info("link: {}", sb.toString());
 							if(item){
 								rssItem.setLink(sb.toString());
 							}
@@ -130,41 +129,38 @@ public class RssProcessTest {
 
 						if (qName.equalsIgnoreCase("description")) {
 							description = false;
-							log.config("description: " + sb.toString());
+							log.info("description: {}", sb.toString());
 							if(item){
 								rssItem.setDescription(sb.toString());
 							}
 							else{
 								rssChannel.setDescription(sb.toString());
 							}
-							//System.out.println();					//TODO ez nem tudom miért kellett, sztem csak a kiíratás miatt, de gondolom kitörölhetem már, vagy lesz jelentősége, hogy ide kellene egy új sor? - gondolom nem...
 						}
 
 						if (qName.equalsIgnoreCase("category")) {
 							category = false;
-							log.config("category: " + sb.toString());
-							rssItem.setCategory(sb.toString()); //TODO mivel csak az itemnek van ilyen eleme ezért így csináltam - ezeket a todo-imat majd kitörölgetheted, ha jó amit írok, vagy átírhatod sima kommentre :D
+							log.info("category: {}", sb.toString());
+							rssItem.setCategory(sb.toString()); //mivel csak az itemnek van category eleme
 						}
 						
 						if (qName.equalsIgnoreCase("pubDate")) {
 							pubDate = false;
-							log.config("pubDate: " + sb.toString());
-							try { //TODO ezeket is a saját kivételkezelővel kellene megoldani?
+							log.info("pubDate: {}", sb.toString());
+							try { //TODO ezeket is a saját kivételkezelővel kellene megoldani? - ezt végig kell gondolni, egyelőre elég egy error log a catch ágban
 								rssItem.setPubDate(date.parse(sb.toString()));
 							} catch (ParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								log.error("Pubdate {} nem értelmezhető!", sb.toString());
 							}
 						}
 						
 						if (qName.equalsIgnoreCase("lastBuildDate")) {
 							lastBuildDate = false;
-							log.config("lastBuildDate: " + sb.toString());
+							log.info("lastBuildDate: {}", sb.toString());
 							try {
 								rssChannel.setLastBuildDate(date.parse(sb.toString()));
 							} catch (ParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								log.error("LastBuildDate {} nem értelmezhető!", sb.toString());
 							}
 						}
 						sb.setLength(0);
