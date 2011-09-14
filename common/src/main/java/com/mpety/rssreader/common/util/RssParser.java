@@ -8,14 +8,27 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.mpety.rssreader.common.exception.RssException;
 import com.mpety.rssreader.common.model.RssChannel;
 
 public class RssParser {
 	
-	public static RssChannel parse(String xmlString){
+	private static final Logger log = LoggerFactory.getLogger(RssParser.class);
+	
+	public static RssChannel parse(String xmlString) throws RssException{ //felfelé dobódik az exception 
+																		  //és majd ahol meghívódik ez a metódus ott fogjuk lekezelni ezt az exepctiont
+		
+		if(xmlString == null || !xmlString.toLowerCase().contains("channel")){
+			log.error("Xml string seems invalid!");
+			log.info("{}", xmlString);
+			throw new RssException("Invalid Xml String!", RssException.XML_ERROR); //belső feltétel miatt csinálunk saját exceptiont,
+																				   //azért nincs throwable paramétere
+		}
 		
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -30,15 +43,15 @@ public class RssParser {
 			return handler.getRssChannel();
 			
 		} catch (ParserConfigurationException e) {
-			// TODO saját exception xmlerror
-			e.printStackTrace();
+			RssException re = new RssException("Parsing error!", RssException.XML_ERROR , e);
+			throw re;
 		} catch (SAXException e) {
-			// TODO
-			e.printStackTrace();
+			RssException re = new RssException("Sax error!", RssException.XML_ERROR , e);
+			throw re;
 		} catch (IOException e) {
-			// TODO
-			e.printStackTrace();
+			RssException re = new RssException("IO error!", RssException.IO_ERROR , e);
+			throw re;
 		}
-		return null; //TODO kitörölni a catch ágak kitöltése után
+		
 	}
 }

@@ -23,7 +23,7 @@ public class UrlDownloaderTest {
 		incorrectUrl = "httx://blahblah.bla";
 		nonExistingUrl = "http://nowhere.com";
 	}
-
+	
 	/**
 	 * Az {@link UrlDownloader#download(String)} metódus tesztelése
 	 * (Megjegyzés: felerészben az internetkapcsolat meglétét teszteli,

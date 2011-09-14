@@ -14,6 +14,14 @@ import com.mpety.rssreader.common.model.RssChannel;
 import com.mpety.rssreader.common.model.RssItem;
 import com.mpety.rssreader.test.RssProcessTest;
 
+/**
+ * Az xml feldolgozását végző osztály, itt lesznek felbontva az xml tag-ek és "eltárolva" változókban, majd listába szervezve.
+ * {@link RssXmlHandler#startElement(String, String, String, Attributes)}, 
+ * {@link RssXmlHandler#endElement(String, String, String)}, {@link RssXmlHandler#characters(char[], int, int)} metódusokat tartalmaz...
+ * @author Peti
+ *
+ */
+
 public class RssXmlHandler extends DefaultHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(RssProcessTest.class);
@@ -22,11 +30,7 @@ public class RssXmlHandler extends DefaultHandler {
 	private RssChannel rssChannel;
 	private RssItem rssItem;
 
-	// TODO valahogy így gondoltam, de belső osztályban nem lehet static
-	// adattag, szóval
-	// ha majd ki lesz szervezve az RssXmlHandler-be akkor még egy static is
-	// kell a private után
-	private final SimpleDateFormat date = new SimpleDateFormat(
+	private static final SimpleDateFormat date = new SimpleDateFormat(
 			"EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
 
 	boolean channel = false;
@@ -48,8 +52,7 @@ public class RssXmlHandler extends DefaultHandler {
 		if (qName.equalsIgnoreCase("channel")) {
 			channel = true;
 			rssChannel = new RssChannel();
-			// rssChannel.setItemList(null); //TODO nem szükséges, mert az
-			// rssChannel list-je nincs beállítva semmire, alapból null lesz
+			// rssChannel.setItemList(null); //nem szükséges, mert alapból null lesz
 		}
 
 		if (qName.equalsIgnoreCase("item")) {

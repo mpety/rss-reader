@@ -2,7 +2,7 @@ package com.mpety.rssreader.common.exception;
 /**
  * Saját kivételkezelő osztály.
  * @author Peti
- *
+ * 
  */
 public class RssException extends Exception {
 	
@@ -10,6 +10,7 @@ public class RssException extends Exception {
 	
 	public static final int WRONG_URL = 1;
 	public static final int IO_ERROR = 2;
+	public static final int XML_ERROR = 3;
 	private int errorCode;
 
 	public RssException(String message, int errorCode, Throwable cause){
@@ -21,15 +22,15 @@ public class RssException extends Exception {
 	public RssException(String message, int errorCode){
 		this(message, errorCode, null);
 	}
-
+	
 	public int getErrorCode() {
 		return errorCode;
 	}
 
 	@Override
 	public String toString() {
-		return "RssException [errorCode=" + errorCode + ", getMessage()="
-				+ getMessage() + ", getCause()=" + getCause() + "]";
+		return "RssException [ errorCode = " + errorCode + ", getMessage()= "
+				+ getMessage() + ", getCause()= " + getCause() + " ]";
 	}
 
 }

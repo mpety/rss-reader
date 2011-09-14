@@ -30,7 +30,7 @@ public class UrlDownloader {
 
 			xmlString = "";
 			while ((inputLine = in.readLine()) != null) {
-				xmlString = xmlString + inputLine;
+				xmlString = xmlString + inputLine; //TODO hatékooonyság
 			}
 			
 			in.close();
