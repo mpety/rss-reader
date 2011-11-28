@@ -28,7 +28,7 @@ public class FileUrlManager implements UrlManager{
 	}
 
 	@Override
-	public void saveUrl(String url) {
+	public void saveUrl(String url){  //TODO Mi van ha az URL már a listában van???
 		urlList.add(url);
 	}
 

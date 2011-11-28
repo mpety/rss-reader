@@ -64,6 +64,8 @@ public class RssChannel {
 		this.description = description;
 	}
 
+	//itt azért nem úgy csináljuk mint a FileUrlManagernél mert akkor a lista elemeit is klónozni kellene, 
+	//figyelni kell hogy a getItemList által visszaadott listán nem szabad módosítani
 	public List<RssItem> getItemList() {
 		return itemList;
 	}
