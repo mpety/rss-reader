@@ -8,14 +8,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class FileUrlManager implements UrlManager{
+	
+	public static final String FILE_PATH_KEY = "urlManager.path";
+	public static final String DEFAULT_PATH = "urls.txt";
 	
 	private String path;
 	private ArrayList<String> urlList;
 	
 	public FileUrlManager(String path){
 		this.path = path;
+	}
+	
+	public FileUrlManager(Properties props) {
+		this.path = props.getProperty(FILE_PATH_KEY, DEFAULT_PATH);
 	}
 
 	@Override
@@ -35,9 +43,9 @@ public class FileUrlManager implements UrlManager{
 	@Override
 	public void open() {
 		File f = new File(path);
+		urlList = new ArrayList<String>(); //A listát üresen inicializáljuk
 		if (!f.exists()){
-			urlList = new ArrayList<String>(); //mivel nem létezik a fájl üres listával indítunk...
-			return;
+			return; //mivel nem létezik a fájl üres listával indítunk...
 		}
 		
 		BufferedReader reader = null;

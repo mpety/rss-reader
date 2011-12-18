@@ -3,6 +3,13 @@
   <test name="Test">
     <classes>
       <class name="com.mpety.rssreader.common.util.UrlDownloaderTest"/>
+      <class name="com.mpety.rssreader.common.util.ManagerProviderTest"/>
+    </classes>
+  </test>
+  <test name="FileUrlManager-empty">
+  	<parameter name="test-url-file" value="empty-urls.txt"/>
+  	<classes>
+      <class name="com.mpety.rssreader.common.util.FileUrlManagerTest"/>
     </classes>
   </test>
 </suite>
